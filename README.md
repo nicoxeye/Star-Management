@@ -1,18 +1,22 @@
-## Getting Started
+# 🌟 Star - Astronomical Star Management System 🌟
+This Java project models and manages astronomical star data with various functionalities. 
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+It provides tools for adding, searching, serialising, desarialising and deleting star records, all stored persistently in an object-oriented database.
 
-## Folder Structure
+## Features
+- **Attributes:** name, catalog name (greek letter + constellation), declination, right ascension, observed/absolute magnitude, distance, constellation, hemisphere, temperature, and mass.
+- **Catalog Updates:** automatically updates catalog names when stars are removed.
+- **Search:** filter by constellation, distance, temperature, magnitude, hemisphere, and identify potential supernovae.
+- **Persistence:** data saved in a serialized object file.
+  
+## Usage
+1. Clone the repository.
 
-The workspace contains two folders by default, where:
+2. Compile with javac and run with java.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+3. Manage stars and perform searches.
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+### Requirements
+JDK 8 or higher.
