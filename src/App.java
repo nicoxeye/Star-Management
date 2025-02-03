@@ -7,6 +7,8 @@ public class App {
 
     //list of ALL the stars
     public static ArrayList<Star> starsList = new ArrayList<>();
+    
+    static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) throws Exception {
 
@@ -23,9 +25,6 @@ public class App {
             System.out.println("========================================");
             System.out.print(" > Choose an option: ");
             
-
-            @SuppressWarnings("resource")
-            Scanner scanner = new Scanner(System.in);
             int choice = scanner.nextInt();
             scanner.nextLine();
 
@@ -145,125 +144,42 @@ public class App {
                         }
                 
                         case 2 -> {
-                            System.out.print("\nEnter a Constellation: ");
-                            String constel = scanner.nextLine();
-                
-                            boolean found = false;
-                            for (Star star : starsList) {
-                                if (star.getConstellation().getName().equals(constel)) {
-                                    System.out.println("Star Name: " + star.getName() + " - Catalogue Name: " + star.getCatalogueName());
-                                    found = true;
-                                }
-                            }
-                
-                            if (!found) {
-                                System.out.println("No stars found in the constellation: " + constel);
-                            }
+                            FindStarByConstellation();
                 
                             System.out.println("\nPress Enter to continue...");
                             scanner.nextLine();
                         }
                 
                         case 3 -> {
-                            System.out.print("Enter minimum temperature: ");
-                            double minTemp = scanner.nextDouble();
-                            System.out.print("Enter maximum temperature: ");
-                            double maxTemp = scanner.nextDouble();
-                            scanner.nextLine();
-                
-                            boolean found = false;
-                            for (Star star : starsList) {
-                                if (star.getTemperature() >= minTemp && star.getTemperature() <= maxTemp) {
-                                    System.out.println("Star Name: " + star.getName() + " - Temperature: " + star.getTemperature() + "°C");
-                                    found = true;
-                                }
-                            }
-                
-                            if (!found) {
-                                System.out.println("No stars found in the temperature range " + minTemp + "°C to " + maxTemp + "°C.");
-                            }
+                            FindStarByTemperature();
                 
                             System.out.println("\nPress Enter to continue...");
                             scanner.nextLine();
                         }
                 
                         case 4 -> {
-                            System.out.print("Enter minimum absolute magnitude: ");
-                            double minAbMag = scanner.nextDouble();
-                            System.out.print("Enter maximum absolute magnitude: ");
-                            double maxAbMag = scanner.nextDouble();
-                            scanner.nextLine();
-                
-                            boolean found = false;
-                            for (Star star : starsList) {
-                                if (star.getAbsoluteMagnitude() >= minAbMag && star.getAbsoluteMagnitude() <= maxAbMag) {
-                                    System.out.println("Star Name: " + star.getName() + " - Absolute Magnitude: " + star.getAbsoluteMagnitude());
-                                    found = true;
-                                }
-                            }
-                
-                            if (!found) {
-                                System.out.println("No stars found in the absolute magnitude range " + minAbMag + " to " + maxAbMag);
-                            }
+                            FindStarByMagnitude();
                 
                             System.out.println("\nPress Enter to continue...");
                             scanner.nextLine();
                         }
                 
                         case 5 -> {
-                            System.out.print("Enter Hemisphere (N/S): ");
-                            String hemisphere = scanner.nextLine();
-                
-                            boolean found = false;
-                            for (Star star : starsList) {
-                                if (star.getHemisphere().equals(hemisphere)) {
-                                    System.out.println("Star Name: " + star.getName() + " - Hemisphere: " + star.getHemisphere());
-                                    found = true;
-                                }
-                            }
-                
-                            if (!found) {
-                                System.out.println("No stars found in the " + hemisphere + " hemisphere.");
-                            }
-                
+                            FindStarByHemisphere();
+
                             System.out.println("\nPress Enter to continue...");
                             scanner.nextLine();
                         }
                         
                         case 6 -> {
-                            System.out.print("Enter The Distance In PCs From Earth: ");
-                            double distance = scanner.nextDouble();
-
-                            boolean found = false;
-                            for (Star star : starsList) {
-                                if ((star.getDistanceInLightYears() / 3.26) == distance) {
-                                    System.out.println("Star Name: " + star.getName() + " - Distance: " + star.getDistanceInLightYears() + " - Distance In Parsecs: " + (star.getDistanceInLightYears() / 3.26));
-                                    found = true;
-                                }
-                            }
-                
-                            if (!found) {
-                                System.out.println("No stars found in the distance of " + distance + " parsecs from Earth.");
-                            }
+                            FindStarByDistance();
                 
                             System.out.println("\nPress Enter to continue...");
                             scanner.nextLine();
                         }
 
                         case 7 -> {
-                            double chandrasekharLimit = 1.44;
-                            boolean foundSupernova = false;
-
-                            for (Star star : starsList) {
-                                if (star.getMass() > chandrasekharLimit) {
-                                    System.out.println("Potential Supernova: " + star.getName() + " - Mass: " + star.getMass() + " solar masses");
-                                    foundSupernova = true;
-                                }
-                            }
-
-                            if (!foundSupernova) {
-                                System.out.println("No potential supernovae found.");
-                            }
+                            Supernovae();
 
                             System.out.println("\nPress Enter to continue...");
                             scanner.nextLine();
@@ -357,6 +273,131 @@ public class App {
             }
         }
     }
+    
+
+    public static void FindStarByConstellation() {
+        System.out.print("\nEnter a Constellation: ");
+        String constel = scanner.nextLine();
+
+        boolean found = false;
+        for (Star star : starsList) {
+            if (star.getConstellation().getName().equals(constel)) {
+                System.out.println("Star Name: " + star.getName() + " - Catalogue Name: " + star.getCatalogueName());
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No stars found in the constellation: " + constel);
+        }
+        
+    }
+
+
+    public static void FindStarByTemperature() {
+        System.out.print("Enter minimum temperature: ");
+        double minTemp = scanner.nextDouble();
+        System.out.print("Enter maximum temperature: ");
+        double maxTemp = scanner.nextDouble();
+        scanner.nextLine();
+
+        boolean found = false;
+        for (Star star : starsList) {
+            if (star.getTemperature() >= minTemp && star.getTemperature() <= maxTemp) {
+                System.out.println("Star Name: " + star.getName() + " - Temperature: " + star.getTemperature() + "°C");
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No stars found in the temperature range " + minTemp + "°C to " + maxTemp + "°C.");
+        }
+        
+    }
+
+
+    public static void FindStarByMagnitude() {
+        System.out.print("Enter minimum absolute magnitude: ");
+        double minAbMag = scanner.nextDouble();
+        System.out.print("Enter maximum absolute magnitude: ");
+        double maxAbMag = scanner.nextDouble();
+        scanner.nextLine();
+
+        boolean found = false;
+        for (Star star : starsList) {
+            if (star.getAbsoluteMagnitude() >= minAbMag && star.getAbsoluteMagnitude() <= maxAbMag) {
+                System.out.println("Star Name: " + star.getName() + " - Absolute Magnitude: " + star.getAbsoluteMagnitude());
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No stars found in the absolute magnitude range " + minAbMag + " to " + maxAbMag);
+        }
+
+    }
+
+    public static void FindStarByHemisphere() {
+        System.out.print("Enter Hemisphere (N/S): ");
+        String hemisphere = scanner.nextLine();
+
+        while (!hemisphere.equals("N") && !hemisphere.equals("S")) {
+            System.out.print("Invalid hemisphere! Enter Hemisphere (N/S): ");
+            hemisphere = scanner.nextLine().toUpperCase();
+        }
+
+        boolean found = false;
+        for (Star star : starsList) {
+            if (star.getHemisphere().equals(hemisphere)) {
+                System.out.println("Star Name: " + star.getName() + " - Hemisphere: " + star.getHemisphere());
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No stars found in the " + hemisphere + " hemisphere.");
+        }
+
+        
+    }
+
+
+    public static void FindStarByDistance() {
+        System.out.print("Enter The Distance In PCs From Earth: ");
+        double distance = scanner.nextDouble();
+
+        boolean found = false;
+        for (Star star : starsList) {
+            if ((star.getDistanceInLightYears() / 3.26) == distance) {
+                System.out.println("Star Name: " + star.getName() + " - Distance: " + star.getDistanceInLightYears() + " - Distance In Parsecs: " + (star.getDistanceInLightYears() / 3.26));
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No stars found in the distance of " + distance + " parsecs from Earth.");
+        }
+        
+    }
+
+    public static void Supernovae() {
+        double chandrasekharLimit = 1.44;
+        boolean foundSupernova = false;
+
+        for (Star star : starsList) {
+            if (star.getMass() > chandrasekharLimit) {
+                System.out.println("Potential Supernova: " + star.getName() + " - Mass: " + star.getMass() + " solar masses");
+                foundSupernova = true;
+            }
+        }
+
+        if (!foundSupernova) {
+            System.out.println("No potential supernovae found.");
+        }
+        
+    }
+
+
 }
     
 
