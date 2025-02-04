@@ -9,15 +9,15 @@ public class Declination implements Serializable{
     public Declination(int degrees, int minutes, double seconds) {
 
         if (degrees < -90 || degrees > 90) {
-            throw new IllegalArgumentException("Degrees have to be between -90 and 90.");
+            throw new DeclinationException("Degrees must be between -90 and 90.");
         }
 
         if (minutes < 0 || minutes > 59) {
-            throw new IllegalArgumentException("Minutes have to be between 0 and 59.");
+            throw new DeclinationException("Minutes must be between 0 and 59.");
         }
 
         if (seconds < 0 || seconds > 59.99) {
-            throw new IllegalArgumentException("Seconds have to be between 0 and 59.99.");
+            throw new DeclinationException("Seconds must be between 0 and 59.99.");
         }
 
         this.degrees = degrees;
@@ -35,7 +35,7 @@ public class Declination implements Serializable{
 
     public void setDegrees(int degrees) {
         if (degrees < -90 || degrees > 90) {
-            throw new IllegalArgumentException("Degrees have to be between -90 and 90.");
+            throw new DeclinationException("Degrees must be between -90 and 90.");
         }
 
         this.degrees = degrees;
@@ -51,7 +51,7 @@ public class Declination implements Serializable{
 
     public void setMinutes(int minutes) {
         if (minutes < 0 || minutes > 59) {
-            throw new IllegalArgumentException("Minutes have to be between 0 and 59.");
+            throw new DeclinationException("Minutes must be between 0 and 59.");
         }
 
             this.minutes = minutes;
@@ -67,17 +67,26 @@ public class Declination implements Serializable{
 
     public void setSeconds(double seconds) {
         if (seconds < 0 || seconds > 59.99) {
-            throw new IllegalArgumentException("Seconds have to be between 0 and 59.99.");
+            throw new DeclinationException("Seconds must be between 0 and 59.99.");
         }
 
             this.seconds = seconds;
         
     }
 
-    //SO IT CAN BE VIEWED IN THE DISPLAY STARS IN MENUUUUuuuuuuuu
-    // before it threw Declination@626b2d4a asdkaskldaklsdkasl
+    public class DeclinationException extends RuntimeException {
+        public DeclinationException(String message) {
+            super(message);
+        }
+    }    
+
+
+    // prettier formating :)
+    // Example output:
+    // +12° 40' 50.0"
     @Override
     public String toString() {
-        return "Degrees - " + degrees + ", Minutes - " + minutes + ", Seconds - " + seconds;
+        return String.format("%+03d° %02d' %04.1f\"", degrees, minutes, seconds);
     }
+    
 }

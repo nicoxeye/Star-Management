@@ -43,6 +43,14 @@ public class Star implements Serializable{
     }
 
 
+    // custom exception so we know an error is star class related 
+    public class StarException extends RuntimeException {
+        public StarException(String message) {
+            super(message);
+        }
+    }    
+
+
     /*
      Star Name Properties.
      The name of a Star has to consist of 3 big letters followed by 4 numbers.
@@ -57,7 +65,7 @@ public class Star implements Serializable{
             this.name = name;
         }
         else {
-            throw new IllegalArgumentException("The name of a Star has to consist of 3 big letters followed by 4 numbers.");
+            throw new StarException("Name of the Star has to consist of 3 big letters and 4 numbers.");
         }
      }
 
@@ -75,7 +83,7 @@ public class Star implements Serializable{
             this.constellation = constellation;
         }
         else {
-            throw new IllegalArgumentException("Constellation given in the parameter has to be an object of the class Constellation");
+            throw new StarException("Constellation must be an instance of Constellation class.");
         }
     }
 
@@ -89,18 +97,18 @@ public class Star implements Serializable{
         return catalogueName;
     }
 
+
     private void setCatalogueName(Constellation constellation) {
         int numberOfStars = StarsInConstellationMap.getOrDefault(constellation.getName(), 0); // defaultValue = 0
-
-        if (numberOfStars >= 24) {
-            throw new IllegalArgumentException("In Constellation: " + constellation.getName() + " can't be more than 23 stars.");
-        } 
-        else { 
-            this.catalogueName = GreekAlphabet.values()[numberOfStars].toString() + " " + constellation.getName();
+    
+        if (numberOfStars >= GreekAlphabet.values().length) {
+            throw new StarException("Too many stars in " + constellation.getName());
         }
-
+    
+        this.catalogueName = GreekAlphabet.values()[numberOfStars] + " " + constellation.getName();
         StarsInConstellationMap.put(constellation.getName(), numberOfStars + 1);
     }
+    
 
     //overload of the method to use ONLY in deletion hehe...
     private void setCatalogueName(String newCatalogueName) {
@@ -123,7 +131,7 @@ public class Star implements Serializable{
                     this.declination = declination;
                 }
                 else {
-                    throw new IllegalArgumentException("For the Northern Hemisphere degrees have to be between 0 and 90.");
+                    throw new StarException("For the Northern Hemisphere degrees have to be between 0 and 90.");
                 }
             }
             case "S" -> {
@@ -131,10 +139,10 @@ public class Star implements Serializable{
                     this.declination = declination;
                 }
                 else {
-                    throw new IllegalArgumentException("For the Southern Hemisphere degrees have to be between -90 and 0.");
+                    throw new StarException("For the Southern Hemisphere degrees have to be between -90 and 0.");
                 }
             }
-            default -> throw new Error("This Hemisphere does not exist.");
+            default -> throw new StarException("This Hemisphere does not exist.");
         }
     }
 
@@ -152,7 +160,7 @@ public class Star implements Serializable{
             this.rightAscension = rightAscension;
         }
         else {
-            throw new IllegalArgumentException("Given parameter is not and instance of RightAscension Class.");
+            throw new StarException("Given parameter is not and instance of RightAscension Class.");
         }
     }
 
@@ -170,7 +178,7 @@ public class Star implements Serializable{
             this.apparentMagnitude = apparentMagnitude;
         }
         else {
-            throw new IllegalArgumentException("Apparent Magnitude must be between -26.74 and 15");
+            throw new StarException("Apparent Magnitude must be between -26.74 and 15");
         }
     }
 
@@ -188,7 +196,7 @@ public class Star implements Serializable{
 
     private void setAbsoluteMagnitude() {
         if (this.distanceInLightYears <= 0) {
-            throw new IllegalArgumentException("Distance must be greater than 0.");
+            throw new StarException("Distance must be greater than 0.");
         }
         this.absoluteMagnitude = this.getApparentMagnitude() - (5 * Math.log10((this.getDistanceInLightYears() / 3.26))) + 5;
     }
@@ -207,7 +215,7 @@ public class Star implements Serializable{
             this.distanceInLightYears = distanceInLightYears;
         }
         else {
-            throw new IllegalArgumentException("Distance has to be greater than 0.");
+            throw new StarException("Distance has to be greater than 0.");
         }
     }
 
@@ -227,7 +235,7 @@ public class Star implements Serializable{
             this.hemisphere = hemisphere;
         }
         else {
-            throw new IllegalArgumentException("Hemisphere has to be either 'N' or 'S'.");
+            throw new StarException("Hemisphere has to be either 'N' or 'S'.");
         }
     }
 
@@ -247,7 +255,7 @@ public class Star implements Serializable{
             this.temperature = temperature;
         }
         else {
-            throw new IllegalArgumentException("Temperature has to be greater than 2000*C.");
+            throw new StarException("Temperature has to be greater than 2000*C.");
         }
     }
 
@@ -267,7 +275,7 @@ public class Star implements Serializable{
             this.mass = mass;
         }
         else {
-            throw new IllegalArgumentException("Mass has to be between 0.1 and 50 (in reference to the mass of the sun).");
+            throw new StarException("Mass has to be between 0.1 and 50 (in reference to the mass of the sun).");
         }
 
     }

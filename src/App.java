@@ -24,7 +24,7 @@ public class App {
             System.out.println(" [6] X Exit");
             System.out.println("========================================");
             System.out.print(" > Choose an option: ");
-            
+
             int choice = scanner.nextInt();
             scanner.nextLine();
 
@@ -105,6 +105,7 @@ public class App {
 
                         System.out.println("\n\nClick enter to continue...");
                         scanner.nextLine();
+
                     } 
                     catch (IllegalArgumentException e) {
                         System.out.println("X Error: " + e.getMessage());
@@ -139,6 +140,7 @@ public class App {
                         case 1 -> {
                             // Created this more for myself to see all the stars objects more easily :]
                             Star.DisplayAllStars();
+
                             System.out.println("\nPress Enter to continue...");
                             scanner.nextLine();
                         }
@@ -188,6 +190,7 @@ public class App {
                         default -> {
                             System.out.println("Invalid option.");
                         }
+                        
                     }
                 }
 
@@ -337,6 +340,7 @@ public class App {
 
     }
 
+
     public static void FindStarByHemisphere() {
         System.out.print("Enter Hemisphere (N/S): ");
         String hemisphere = scanner.nextLine();
@@ -368,7 +372,8 @@ public class App {
 
         boolean found = false;
         for (Star star : starsList) {
-            if ((star.getDistanceInLightYears() / 3.26) == distance) {
+            // to avoid floating-point precision failures :)
+            if (Math.abs((star.getDistanceInLightYears() / 3.26) - distance) < 0.01) {
                 System.out.println("Star Name: " + star.getName() + " - Distance: " + star.getDistanceInLightYears() + " - Distance In Parsecs: " + (star.getDistanceInLightYears() / 3.26));
                 found = true;
             }
@@ -379,6 +384,7 @@ public class App {
         }
         
     }
+
 
     public static void Supernovae() {
         double chandrasekharLimit = 1.44;

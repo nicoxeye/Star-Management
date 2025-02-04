@@ -8,13 +8,13 @@ public class RightAscension implements Serializable{
 
     public RightAscension(int hours, int minutes, int seconds) {
         if (hours < 0 || hours > 24) {
-            throw new IllegalArgumentException("Hours have to be between 0 and 24.");
+            throw new RightAscensionException("Hours must be between 0 and 24.");
         }
         if (minutes < 0 || minutes > 59) {
-            throw new IllegalArgumentException("Minutes have to be between 0 and 59.");
+            throw new RightAscensionException("Minutes must be between 0 and 59.");
         }
         if (seconds < 0 || seconds > 59) {
-            throw new IllegalArgumentException("Seconds have to be between 0 and 59.");
+            throw new RightAscensionException("Seconds must be between 0 and 59.");
         }
 
         this.hours = hours;
@@ -22,6 +22,13 @@ public class RightAscension implements Serializable{
         this.seconds = seconds;
 
     }
+
+
+    public class RightAscensionException extends RuntimeException {
+        public RightAscensionException(String message) {
+            super(message);
+        }
+    }    
 
 
     /*
@@ -34,7 +41,7 @@ public class RightAscension implements Serializable{
     public void setHours(int hours) {
 
         if (hours < 0 || hours > 24) {
-            throw new IllegalArgumentException("Hours have to be between 0 and 24.");
+            throw new RightAscensionException("Hours must be between 0 and 24.");
         }
 
         this.hours = hours;
@@ -52,7 +59,7 @@ public class RightAscension implements Serializable{
     public void setMinutes(int minutes) {
         
         if (minutes < 0 || minutes > 59) {
-            throw new IllegalArgumentException("Minutes have to be between 0 and 59.");
+            throw new RightAscensionException("Minutes must be between 0 and 59.");
         }
 
         this.minutes = minutes;
@@ -70,7 +77,7 @@ public class RightAscension implements Serializable{
     public void setSeconds(int seconds) {
 
         if (seconds < 0 || seconds > 59) {
-            throw new IllegalArgumentException("Seconds have to be between 0 and 59.");
+            throw new RightAscensionException("Seconds must be between 0 and 59.");
         }
 
         this.seconds = seconds;
