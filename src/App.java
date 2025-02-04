@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.*;
 
 public class App {
@@ -201,24 +205,32 @@ public class App {
                     //deleting it from the folder Stars only!!
                     Star.DeleteStar(catalogueName);
 
-                    // here i delete it from the stars list since the searching in [2] bases on this list...
-                    boolean found = false;
-                    for (Star star : starsList) {
-                        if (star.getCatalogueName().equalsIgnoreCase(catalogueName)) {
-                            starsList.remove(star);
-                            System.out.println("Star removed from the list: " + catalogueName);
-                            found = true;
-                            break;
+                    starsList.clear(); //clearing the old list
+
+                    File starsFolder = new File("src\\Stars\\");
+                    File[] files = starsFolder.listFiles((_, name) -> name.endsWith(".obj"));
+
+                    if (files != null) {
+                        for (File file : files) {
+                            try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(file))) {
+                                Object obj = inputStream.readObject();
+                                if (obj instanceof Star star) {
+                                    starsList.add(star); // re-add the star to the list
+                                }
+                            } catch (IOException | ClassNotFoundException e) {
+                                System.out.println("Error loading star: " + e.getMessage());
+                            }
                         }
-                    }
 
-                    if (!found) {
-                        System.out.println("No star found with the catalogue name: " + catalogueName);
-                    }
+                    //sorting the stars in list
+                    starsList.sort(Comparator.comparingInt(star -> 
+                        Arrays.asList(GreekAlphabet.values()).indexOf(GreekAlphabet.valueOf(star.getCatalogueName().split(" ")[0]))));
 
+                    System.out.println("Star removed and list updated.");
                     System.out.println("\nPress Enter to continue...");
                     scanner.nextLine();
                 }
+            }
 
                 case 4 -> {
                     // Serialising and existing Star (created in case 1)
