@@ -318,76 +318,97 @@ public class Star implements Serializable{
         }
     }
     
+    
 
     public static void DeleteStar(String catalogueName) {
 
-        List<Star> starsInConstellation = new ArrayList<>();
-
-        Star starToDelete = null;
-        String constellationName = null;
-    
-        // loading all stars from the serialized files in the Stars folder
-        File starsFolder = new File("src\\Stars\\");
-    
-        File[] files = starsFolder.listFiles((_, name) -> name.endsWith(".obj"));
-    
-        // finding all stars in the same constellation and the one to delete
-        for (File file : files) {
-            try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(file))) {
-                Object obj = inputStream.readObject();
-                if (obj instanceof Star star) {
-                    //fiding the same stars wit hthe same catalogue name as given in the parmeter
-                    if (star.getCatalogueName().equals(catalogueName)) {
-                        starToDelete = star;
-                        constellationName = star.getConstellation().getName();
-                    } else if (star.getConstellation().getName().equals(constellationName)) {
-                        starsInConstellation.add(star);
-                    }
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                // just for testing
-                //System.err.println("Error loading star from " + file.getName() + ": " + e.getMessage());
-            }
-        }
-    
+        // finding the star to delete
+        Star starToDelete = findStarByCatalogueName(catalogueName);
+        
         if (starToDelete == null) {
-            System.out.println("Star not found.");
+            System.out.println("Star not found in the database.");
             return;
         }
-    
-        // deleting the found star's file 
-        File fileToDelete = new File("src\\Stars\\" + starToDelete.getName() + ".obj");
-        if (fileToDelete.delete()) {
-            System.out.println("Deleted star: " + starToDelete.getCatalogueName());
+
+        if (deleteStarFile(starToDelete)) {
+            System.out.println("Deleted star file: " + catalogueName);
         } else {
             System.out.println("Failed to delete star file.");
             return;
         }
     
-        // removing the star from StarsInConstellationMap!!! for correct assigment of greek alphabet to the catalogue name
-        int numberOfStars = StarsInConstellationMap.getOrDefault(constellationName, 0);
-        StarsInConstellationMap.put(constellationName, numberOfStars - 1);
+        // removing the star from the constellation and updating the catalogues with rcorrect values
+        String constellationName = starToDelete.getConstellation().getName();
+        List<Star> starsInConstellation = getStarsInConstellation(constellationName);
+        updateStarsInConstellation(starsInConstellation, constellationName);
     
-        // sorting stars in the constellation by their Greek alphabet order and update catalogue names
-        starsInConstellation.sort(Comparator.comparingInt(star -> 
-            Arrays.asList(GreekAlphabet.values()).indexOf(GreekAlphabet.valueOf(star.getCatalogueName().split(" ")[0]))));
+        System.out.println("Star deletion complete.");
+    }
+
+
+    private static Star findStarByCatalogueName(String catalogueName) {
+
+        File starsFolder = new File("src\\Stars\\");
+        File[] files = starsFolder.listFiles((_, name) -> name.endsWith(".obj"));
     
+        for (File file : files) {
+            try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(file))) {
+                Object obj = inputStream.readObject();
+                if (obj instanceof Star star && star.getCatalogueName().equalsIgnoreCase(catalogueName)) {
+                    return star;
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                System.err.println("Error loading star from " + file.getName() + ": " + e.getMessage());
+            }
+        }
+        return null;
+
+    }
+    
+    
+    private static boolean deleteStarFile(Star star) {
+        File fileToDelete = new File("src\\Stars\\" + star.getName() + ".obj");
+        return fileToDelete.delete();
+    }
+
+    private static List<Star> getStarsInConstellation(String constellationName) {
+        List<Star> starsInConstellation = new ArrayList<>();
+        File starsFolder = new File("src\\Stars\\");
+        File[] files = starsFolder.listFiles((_, name) -> name.endsWith(".obj"));
+    
+        for (File file : files) {
+            try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(file))) {
+                Object obj = inputStream.readObject();
+                if (obj instanceof Star star && star.getConstellation().getName().equals(constellationName)) {
+                    starsInConstellation.add(star);
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                System.err.println("Error loading star from " + file.getName() + ": " + e.getMessage());
+            }
+        }
+        return starsInConstellation;
+    }
+
+    
+    private static void updateStarsInConstellation(List<Star> starsInConstellation, String constellationName) {
+        // sorting stars by Greek alphabet order
+        starsInConstellation.sort(Comparator.comparingInt(star ->
+                Arrays.asList(GreekAlphabet.values()).indexOf(
+                        GreekAlphabet.valueOf(star.getCatalogueName().split(" ")[0]))));
+    
+        // updating catalogue names and saving updated stars
         for (int i = 0; i < starsInConstellation.size(); i++) {
             Star star = starsInConstellation.get(i);
-
-            //updating catalogue name to reflect the new Greek letter order
-            String cn = GreekAlphabet.values()[i] + " " + star.getConstellation().getName();
-            star.setCatalogueName(cn);
-
-            //saving the updated star back to the file
+            String newCatalogueName = GreekAlphabet.values()[i] + " " + star.getConstellation().getName();
+            star.setCatalogueName(newCatalogueName);
             SerialiseStar(star);
         }
     
-        // updating the count in the map to reflect the new number of stars in the constellation
+        // updating the count of the map
         StarsInConstellationMap.put(constellationName, starsInConstellation.size());
-    
-        System.out.println("Catalogue names updated successfully.");
     }
+    
+    
 
 
     // my addition for easier viewing of the created stars :D
