@@ -142,7 +142,6 @@ public class App {
                 
                     switch (choice2) {
                         case 1 -> {
-                            // Created this more for myself to see all the stars objects more easily :]
                             Star.DisplayAllStars();
 
                             System.out.println("\nPress Enter to continue...");

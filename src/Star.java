@@ -408,10 +408,9 @@ public class Star implements Serializable{
         StarsInConstellationMap.put(constellationName, starsInConstellation.size());
     }
     
-    
 
 
-    // my addition for easier viewing of the created stars :D
+    // viewing of the stars :D
     public static void DisplayAllStars() {
         //this deserialises all the stars in the src\Stars folder automatically so they dont need to be deserialised to be viewed
 
